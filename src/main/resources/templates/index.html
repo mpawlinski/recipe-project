@@ -5,9 +5,13 @@
     <meta charset="UTF-8"/>
     <title>Recipe Home</title>
 
+    <script src="/webjars/jquery/3.0.0/jquery.min.js"></script>
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"
+          th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.min.css}">
+
 </head>
 
 <body>
@@ -33,14 +37,17 @@
                             <tr th:remove="all">
                                 <td th:text="${recipe.id}">111</td>
                                 <td th:text="${recipe.description}">Good stuff</td>
+                                <td><a href="#">View</a></td>
                             </tr>
                             <tr th:remove="all">
                                 <td th:text="${recipe.id}">222</td>
                                 <td th:text="${recipe.description}">Tasty Goodness</td>
+                                <td><a href="#">View</a></td>
                             </tr>
                             <tr th:each="recipe : ${recipes}">
                                 <td th:text="${recipe.id}">333</td>
                                 <td th:text="${recipe.description}">Really, really good stuff</td>
+                                <td><a href="#" th:href="@{'/recipe/show/' + ${recipe.id}}">View</a></td>
                             </tr>
                         </table>
                     </div>

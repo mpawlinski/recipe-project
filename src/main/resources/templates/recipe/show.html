@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Show Recipe</title>
+
+    <script src="/webjars/jquery/3.0.0/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"
+          th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.min.css}">
+</head>
+
+<body>
+    <div class="container-fluid" style="margin-top 20px">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+
+                <div class="card border-success">
+                    <div class="card-heading text-default bg-success">
+                        <!--/*@thymesVar id="recipe" type="com.pawlinski.recipeproject.model.Recipe"*/-->
+                        <h2 class="card-header" th:text="${recipe.description}">Recipe Description Here</h2>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h5>Categories:</h5>
+                                </div>
+                                <div class="col-md-9">
+                                    <ul>
+                                        <li th:remove="all">category 1</li>
+                                        <li th:remove="all">category 2</li>
+                                        <li th:each="category : ${recipe.categories}" th:text="${category.getDescription()}">category 3</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h5>Prep time:</h5>
+                                </div>
+                                <div class="col-md-3">
+                                    <p th:text="${recipe.getPrepTime()} + ' min'">99 min</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <h5>Difficulty</h5>
+                                </div>
+                                <div class="col-md-3">
+                                    <p th:text="${recipe.getDifficulty()}">Easy</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h5>Cooktime:</h5>
+                                </div>
+                                <div class="col-md-3">
+                                    <p th:text="${recipe.getCookTime() + ' min'}">999 min</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <h5>Servings</h5>
+                                </div>
+                                <div class="col-md-3">
+                                    <p th:text="${recipe.getServings()}">8</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h5>Source:</h5>
+                                </div>
+                                <div class="col-md-3">
+                                    <p th:text="${recipe.getSource()}">200</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <h5>URL:</h5>
+                                </div>
+                                <div class="col-md-3">
+                                    <p th:text="${recipe.getUrl()}">www.example.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-border-success">
+                        <div class="card-heading bg-success">
+                            <h2 class="card-header">Ingredients</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ul>
+                                        <li th:remove="all">1 cup of water</li>
+                                        <li th:remove="all">1/2 cup of milk</li>
+                                        <li th:each="ingredient : ${recipe.ingredients}"
+                                            th:text="${(ingredient.getAmount() + ' ' + ingredient.uom.getDescription() +
+                                            ' - ' + ingredient.getDescription())}">1 tablespoon of chocolate powder</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-border-success">
+                        <div class="card-heading bg-success">
+                            <h2 class="card-header">Directions</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p th:text="${recipe.getDirections()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tincidunt ante in tincidunt faucibus. Aliquam dignissim est eu nunc luctus, vitae tempus ipsum blandit. In ac imperdiet nibh, nec scelerisque nisi. Phasellus eget hendrerit risus. Nullam tincidunt, orci eget tempus facilisis, mauris velit varius risus, malesuada malesuada nisl quam a quam. Praesent lacinia sodales nisi eget egestas. Aenean finibus, dui eu accumsan aliquet, tellus lectus tempor nunc, in tincidunt nisl sapien ac massa. Duis imperdiet augue quis erat auctor sollicitudin. Pellentesque pretium, sem eget varius sodales, risus dui ornare lorem, at vehicula felis nunc id elit. Nullam dapibus neque quis.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-border-success">
+                        <div class="card-heading bg-success">
+                            <h2 class="card-header">Notes</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="col-md-12">
+                                <p th:text="${recipe.notes.getRecipeNotes()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non faucibus metus. Duis varius libero non nibh aliquet, id bibendum odio pretium. Pellentesque eget tellus ligula. Proin faucibus lectus ultrices vulputate ornare. Donec pretium dictum lectus, et sagittis nibh ultrices at. Pellentesque sed mollis lectus. Vestibulum ultricies felis at massa.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
