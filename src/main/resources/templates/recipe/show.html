@@ -19,7 +19,6 @@
 
                 <div class="card border-success">
                     <div class="card-heading text-default bg-success">
-                        <!--/*@thymesVar id="recipe" type="com.pawlinski.recipeproject.model.Recipe"*/-->
                         <h2 class="card-header" th:text="${recipe.description}">Recipe Description Here</h2>
                     </div>
                     <div class="card-body">
@@ -83,7 +82,15 @@
 
                     <div class="card-border-success">
                         <div class="card-heading bg-success">
-                            <h2 class="card-header">Ingredients</h2>
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <h2 class="card-header">Ingredients</h2>
+                                </div>
+                                <div class="col-xs-1">
+                                    <a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" class="btn btn-dark">View</a>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="card-body">
                             <div class="row">
