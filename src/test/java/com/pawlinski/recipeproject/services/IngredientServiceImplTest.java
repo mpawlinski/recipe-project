@@ -3,6 +3,7 @@ package com.pawlinski.recipeproject.services;
 import com.pawlinski.recipeproject.commands.IngredientCommand;
 import com.pawlinski.recipeproject.converters.IngredientCommandToIngredient;
 import com.pawlinski.recipeproject.converters.IngredientToIngredientCommand;
+import com.pawlinski.recipeproject.converters.UnitOfMeasureCommandToUnitOfMeasure;
 import com.pawlinski.recipeproject.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.pawlinski.recipeproject.model.Ingredient;
 import com.pawlinski.recipeproject.model.Recipe;
@@ -27,7 +28,9 @@ public class IngredientServiceImplTest {
     @Mock
     RecipeRepository recipeRepository;
 
+
     IngredientToIngredientCommand ingredientToIngredientCommandConverter;
+
 
     IngredientCommandToIngredient ingredientCommandToIngredientConverter;
 
@@ -36,6 +39,7 @@ public class IngredientServiceImplTest {
 
     public IngredientServiceImplTest() {
         this.ingredientToIngredientCommandConverter = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
+        this.ingredientCommandToIngredientConverter = new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
     }
 
     @Before
@@ -77,7 +81,7 @@ public class IngredientServiceImplTest {
     public void testSaveIngredientCommand() {
         //given
         IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setId(1L);
+        ingredientCommand.setId(3L);
         ingredientCommand.setRecipeId(2L);
 
         Optional<Recipe> recipeOptional = Optional.of(new Recipe());
