@@ -94,4 +94,24 @@ public class IngredientControllerTest {
                 .andExpect(view().name("redirect:/recipe/2/ingredient/1/show"));
     }
 
+    @Test
+    public void testNewIngredientForm() throws Exception {
+        //given
+        RecipeCommand recipeCommand = new RecipeCommand();
+
+        mockMvc.perform(get("/recipe/1/ingredient/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredients/ingredientform"))
+                .andExpect(model().attributeExists("ingredient"))
+                .andExpect(model().attributeExists("uomList"));
+    }
+
+    @Test
+    public void testDeleteIngredient() throws Exception {
+
+        mockMvc.perform(get("/recipe/1/ingredient/2/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/1/ingredients"));
+        verify(ingredientService, times(1)).deleteIngredientByRecipeIdAndIngredientId(anyLong(), anyLong());
+    }
 }

@@ -9,6 +9,7 @@ import com.pawlinski.recipeproject.repositories.RecipeRepository;
 import com.pawlinski.recipeproject.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -33,7 +34,6 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
-
         Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
 
         if (!recipeOptional.isPresent()) {
@@ -55,6 +55,7 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredientCommandOptional.get();
     }
 
+    @Transactional
     @Override
     public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(ingredientCommand.getRecipeId());
@@ -86,11 +87,50 @@ public class IngredientServiceImpl implements IngredientService {
 
             Recipe savedRecipe = recipeRepository.save(recipe);
 
-            //todo check for fail
-            return ingredientToIngredientCommand.convert(savedRecipe.getIngredients().stream()
+            //this works only if the entity is already persisted (update)
+            //ingredient command wasn't yet persisted - HAS NO ID
+            Optional<Ingredient> savedIngredientOptional = savedRecipe.getIngredients()
+                    .stream()
                     .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
-                    .findFirst()
-                    .get());
+                    .findFirst();
+
+            if(!savedIngredientOptional.isPresent()) {
+                savedIngredientOptional = savedRecipe.getIngredients()
+                        .stream()
+                        .filter(ingredient -> ingredient.getDescription().equals(ingredientCommand.getDescription()))
+                        .filter(ingredient -> ingredient.getAmount().equals(ingredientCommand.getAmount()))
+                        .filter(ingredient -> ingredient.getUom().getId().equals(ingredientCommand.getUom().getId()))
+                        .findFirst();
+            }
+
+            //todo check for fail
+            return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
+        }
+    }
+
+
+    @Override
+    public void deleteIngredientByRecipeIdAndIngredientId(Long recipeId, Long ingredientIdToDelete) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+
+        if(recipeOptional.isPresent()) {
+            Recipe recipe = recipeOptional.get();
+            log.debug("found recipe");
+
+            Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
+                    .filter(ingredient -> ingredient.getId().equals(ingredientIdToDelete))
+                    .findFirst();
+
+            if(ingredientOptional.isPresent()) {
+                Ingredient ingredientToDelete = ingredientOptional.get();
+                log.debug("ingredient to delete found");
+                ingredientToDelete.setRecipe(null);
+                recipe.getIngredients().remove(ingredientToDelete); // needed for Hibernate to delete it from database
+                recipeRepository.save(recipe);
+            }
+        } else {
+            //todo exception handling
+            log.debug("recipe was not found, id: " + recipeId);
         }
     }
 

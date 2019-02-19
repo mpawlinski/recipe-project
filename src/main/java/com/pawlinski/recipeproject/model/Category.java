@@ -1,12 +1,14 @@
 package com.pawlinski.recipeproject.model;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = {"recipes"})
 @Entity
 public class Category {
@@ -19,4 +21,10 @@ public class Category {
     @ManyToMany(mappedBy = "categories")
     private Set<Recipe> recipes;
 
+    public Category() {
+    }
+
+    public String toString() {
+        return "Category(id=" + this.getId() + ", description=" + this.getDescription() + ", recipes=" + this.getRecipes() + ")";
+    }
 }

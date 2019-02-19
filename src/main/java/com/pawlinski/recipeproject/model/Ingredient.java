@@ -1,12 +1,14 @@
 package com.pawlinski.recipeproject.model;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = {"recipe"})
 @Entity
 public class Ingredient {
@@ -36,4 +38,7 @@ public class Ingredient {
         return other instanceof Ingredient;
     }
 
+    public String toString() {
+        return "Ingredient(id=" + this.getId() + ", description=" + this.getDescription() + ", amount=" + this.getAmount() + ", recipe=" + this.getRecipe() + ", uom=" + this.getUom() + ")";
+    }
 }

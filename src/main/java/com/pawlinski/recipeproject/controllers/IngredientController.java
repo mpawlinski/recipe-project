@@ -1,6 +1,7 @@
 package com.pawlinski.recipeproject.controllers;
 
 import com.pawlinski.recipeproject.commands.IngredientCommand;
+import com.pawlinski.recipeproject.commands.UnitOfMeasureCommand;
 import com.pawlinski.recipeproject.services.IngredientService;
 import com.pawlinski.recipeproject.services.RecipeService;
 import com.pawlinski.recipeproject.services.UnitOfMeasureService;
@@ -66,4 +67,27 @@ public class IngredientController {
 
         return "redirect:/recipe/" + savedIngredientCommand.getRecipeId() + "/ingredient/" + savedIngredientCommand.getId() + "/show";
     }
+
+    @RequestMapping("/recipe/{recipeId}/ingredient/new")
+    public String newIngredient(@PathVariable String recipeId, Model model) {
+        //need to set a recipe id for a new ingredient (id is hidden on form)
+        IngredientCommand newIngredient = new IngredientCommand();
+        newIngredient.setRecipeId(Long.valueOf(recipeId));
+        model.addAttribute("ingredient", newIngredient);
+
+        //initialize uom
+        newIngredient.setUom(new UnitOfMeasureCommand());
+        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+
+        return "recipe/ingredients/ingredientform";
+    }
+
+    @RequestMapping("/recipe/{recipeId}/ingredient/{ingredientId}/delete")
+    public String deleteIngredient(@PathVariable String recipeId,
+                                   @PathVariable String ingredientId) {
+        ingredientService.deleteIngredientByRecipeIdAndIngredientId(new Long(recipeId), new Long(ingredientId));
+
+        return "redirect:/recipe/" + recipeId + "/ingredients";
+    }
+
 }
