@@ -22,12 +22,4 @@ public class CategoryTest {
 
         assertEquals(idValue, category.getId());
     }
-
-    @Test
-    public void getDescription() {
-    }
-
-    @Test
-    public void getRecipes() {
-    }
 }
