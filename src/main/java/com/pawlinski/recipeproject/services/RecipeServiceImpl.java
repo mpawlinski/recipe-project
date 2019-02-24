@@ -3,6 +3,7 @@ package com.pawlinski.recipeproject.services;
 import com.pawlinski.recipeproject.commands.RecipeCommand;
 import com.pawlinski.recipeproject.converters.RecipeCommandToRecipe;
 import com.pawlinski.recipeproject.converters.RecipeToRecipeCommand;
+import com.pawlinski.recipeproject.exceptions.NotFoundException;
 import com.pawlinski.recipeproject.model.Recipe;
 import com.pawlinski.recipeproject.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,8 @@ public class RecipeServiceImpl implements RecipeService{
         Optional<Recipe> recipeOptional = recipeRepository.findById(l);
 
         if(!recipeOptional.isPresent()) {
-            throw new RuntimeException("Recipe not found!");
+            throw new NotFoundException("Recipe with Id: " + l.toString() + " not Found.");
+
         }
 
         return recipeOptional.get();

@@ -2,6 +2,7 @@ package com.pawlinski.recipeproject.controllers;
 
 import com.pawlinski.recipeproject.commands.IngredientCommand;
 import com.pawlinski.recipeproject.commands.RecipeCommand;
+import com.pawlinski.recipeproject.model.Recipe;
 import com.pawlinski.recipeproject.services.IngredientService;
 import com.pawlinski.recipeproject.services.RecipeService;
 import com.pawlinski.recipeproject.services.UnitOfMeasureService;
@@ -40,7 +41,9 @@ public class IngredientControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         controller = new IngredientController(recipeService, ingredientService, unitOfMeasureService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
     }
 
     @Test
@@ -113,5 +116,18 @@ public class IngredientControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/1/ingredients"));
         verify(ingredientService, times(1)).deleteIngredientByRecipeIdAndIngredientId(anyLong(), anyLong());
+    }
+
+    @Test
+    public void testNumberFormatException() throws Exception {
+
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        when(recipeService.findById(anyLong())).thenReturn(recipe);
+
+        mockMvc.perform(get("/recipe/1/ingredient/wrongInput/show"))
+                .andExpect(view().name("recipe/400error"))
+                .andExpect(status().isBadRequest());
     }
 }

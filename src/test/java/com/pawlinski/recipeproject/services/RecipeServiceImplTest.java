@@ -2,6 +2,7 @@ package com.pawlinski.recipeproject.services;
 
 import com.pawlinski.recipeproject.converters.RecipeCommandToRecipe;
 import com.pawlinski.recipeproject.converters.RecipeToRecipeCommand;
+import com.pawlinski.recipeproject.exceptions.NotFoundException;
 import com.pawlinski.recipeproject.model.Recipe;
 import com.pawlinski.recipeproject.repositories.RecipeRepository;
 import org.junit.Before;
@@ -78,6 +79,15 @@ public class RecipeServiceImplTest {
         //then
         verify(recipeRepository, times(1)).deleteById(anyLong());
 
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void getRecipeByIdTestNotFound() throws Exception {
+        Optional<Recipe> recipeOptional = Optional.empty();
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+
+        Recipe returnedRecipe = recipeService.findById(1L);
+        //should cause error
     }
 
 }

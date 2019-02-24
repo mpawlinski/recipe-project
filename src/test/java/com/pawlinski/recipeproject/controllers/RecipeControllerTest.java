@@ -1,6 +1,7 @@
 package com.pawlinski.recipeproject.controllers;
 
 import com.pawlinski.recipeproject.commands.RecipeCommand;
+import com.pawlinski.recipeproject.exceptions.NotFoundException;
 import com.pawlinski.recipeproject.model.Recipe;
 import com.pawlinski.recipeproject.services.RecipeService;
 import org.junit.Before;
@@ -31,7 +32,9 @@ public class RecipeControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         controller = new RecipeController(recipeService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
     }
 
     @Test
@@ -90,4 +93,28 @@ public class RecipeControllerTest {
                 .andExpect(view().name("redirect:/"));
     }
 
+    @Test
+    public void testGetRecipeNotFound() throws Exception {
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testHandleNotFoundException() throws Exception {
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/5/show"))
+                .andExpect(view().name("recipe/404error"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testHandleNumberFormatException() throws Exception {
+
+        mockMvc.perform(get("/recipe/wrongInput/show"))
+                .andExpect(view().name("recipe/400error"))
+                .andExpect(status().isBadRequest());
+    }
 }
