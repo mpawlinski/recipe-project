@@ -18,6 +18,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
+    //ContextRefreshedEvent gets thrown when the Spring Context starts up. When app is running this event loads the data
 
     private final CategoryRepository categoryRepository;
     private final RecipeRepository recipeRepository;
