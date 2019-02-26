@@ -1,8 +1,10 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/sfg_prod
+    initialization-mode: always
+    url: jdbc:mysql://localhost:3306/sfg_prod?&useTimezone=true&serverTimezone=UTC
     username: sfg_prod_user
     password: guru
+    platform: mysql
   jpa:
     hibernate:
       ddl-auto: validate
