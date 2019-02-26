@@ -1,5 +1,6 @@
 spring:
   datasource:
+    initialization-mode: always
     url: jdbc:mysql://localhost:3306/sfg_dev?&useTimezone=true&serverTimezone=UTC
     username: sfg_dev_user
     password: guru
