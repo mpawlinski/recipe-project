@@ -6,4 +6,7 @@ This is a functional recipe management web app created using Spring Boot, HTML, 
 Following functions can be performed on this web app (CRUD operations with Spring MVC) :
 
 view/add/delete/update recipe
+
 view/add/delete/update an ingredient
+
+add/delete images
